@@ -25,8 +25,8 @@ app.post('/users', jsonParser, async (req, res) => {
 
     const sql = `INSERT INTO USERS (user_id, name, email, password) VALUES ($1, $2, $3, $4)`;
 
-    const [result, error] = await pool.query(sql, [user_id, name, email, password]);
-    if (error) throw error;
+    const result = await pool.query(sql, [user_id, name, email, password]);
+    
     res.status(201).json({ message: 'Recipe created successfully' });
 });
 
