@@ -1,16 +1,14 @@
 const express = require('express');
 const pg = require('pg');
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-
+const bcrypt = require('bcrypt');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 const app = express();
 
-// Connect to PostgreSQL database
 const connectionString = `postgres://postgres:password@localhost:5432`;
 const pool = new pg.Pool({ connectionString });
 
 
-// Define routes for handling API requests
 app.get('/api/users', async (req, res) => {
     pool.query('SELECT * FROM users',
         (error, results) => {
@@ -30,11 +28,28 @@ app.get('/api/recipes', async (req, res) => {
 
 });
 
+app.post('/api/login', jsonParser, async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+
+    pool.query('SELECT PASSWORD FROM USERS WHERE EMAIL = $1', [email],
+        async (error, results) => {
+            let match = await bcrypt.compare(password, results.rows[0].password)
+            if (match)
+                res.status(201).json({ message: 'Authenticated!' });
+            else
+                res.status(401).json({ message: 'Please try again!' });
+        })
+});
+
+
+
 app.post('/api/users', jsonParser, async (req, res) => {
     const email = req.body.email;
     const name = req.body.name;
-    const password = req.body.password;
-
+    let password = req.body.password;
+    password = await bcrypt.hash(password, 11);
     const sql = `INSERT INTO USERS (name, email, password) VALUES ($1, $2, $3)`;
 
     pool.query(sql, [name, email, password],
