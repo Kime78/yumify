@@ -38,6 +38,8 @@ app.post('/api/login', jsonParser, async (req, res) => {
     pool.query('SELECT PASSWORD FROM USERS WHERE EMAIL = $1', [email],
         async (error, results) => {
             let match = await bcrypt.compare(password, results.rows[0].password)
+            if (error)
+                res.status(500).json(error.message)
             if (match)
                 res.status(201).json({ message: 'Authenticated!' });
             else
@@ -71,7 +73,11 @@ app.post('/api/recipes', jsonParser, async (req, res) => {
     const servings = req.body.servings;
     const author_id = req.body.author_id;
 
-    const sql = `INSERT INTO RECIPES (title, description, instructions, cook_time, servings, author_id) VALUES ($1, $2, $3, $4, $5, $6)`;
+    const sql = `
+        INSERT INTO RECIPES 
+        (title, description, instructions, cook_time, servings, author_id) 
+        VALUES 
+        ($1, $2, $3, $4, $5, $6)`;
 
     pool.query(sql, [title, description, instructions, cook_time, servings, author_id],
         (error, results) => {
