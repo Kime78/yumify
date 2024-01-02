@@ -16,6 +16,11 @@ CREATE TABLE IF NOT EXISTS recipes (
   FOREIGN KEY (author_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS ingredients (
+  ingredient_id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
   recipe_ingredient_id SERIAL PRIMARY KEY,
   recipe_id INT NOT NULL,
@@ -26,8 +31,4 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
   FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id)
 );
 
-CREATE TABLE IF NOT EXISTS ingredients (
-  ingredient_id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL UNIQUE
-);
 
