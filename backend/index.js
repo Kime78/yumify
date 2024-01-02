@@ -13,8 +13,9 @@ app.get('/api/users', async (req, res) => {
     pool.query('SELECT * FROM users',
         (error, results) => {
             if (error)
-                throw error;
-            res.json(results.rows)
+                res.status(500).json(error);
+            else
+                res.json(results.rows)
         });
 });
 
@@ -22,8 +23,9 @@ app.get('/api/recipes', async (req, res) => {
     pool.query('SELECT * FROM recipes',
         (error, results) => {
             if (error)
-                throw error;
-            res.json(results.rows)
+                res.status(500).json(error);
+            else
+                res.json(results.rows)
         });
 
 });
@@ -55,8 +57,9 @@ app.post('/api/users', jsonParser, async (req, res) => {
     pool.query(sql, [name, email, password],
         (error, results) => {
             if (error)
-                throw error;
-            res.status(201).json({ message: 'User created successfully' });
+                res.status(500).json(error);
+            else
+                res.status(201).json({ message: 'User created successfully' });
         });
 });
 
@@ -73,8 +76,9 @@ app.post('/api/recipes', jsonParser, async (req, res) => {
     pool.query(sql, [title, description, instructions, cook_time, servings, author_id],
         (error, results) => {
             if (error)
-                throw error;
-            res.status(201).json({ message: 'Recipe created successfully' });
+                res.status(500).json(error);
+            else
+                res.status(201).json({ message: 'Recipe created successfully' });
         }
     );
 });
@@ -93,8 +97,9 @@ app.get('/api/ingredients/:recipe_id', jsonParser, async (req, res) => {
         [recipe_id],
         (error, results) => {
             if (error)
-                throw error;
-            res.json(results.rows)
+                res.status(501).json(error);
+            else
+                res.json(results.rows)
         }
     )
 });
