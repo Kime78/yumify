@@ -13,7 +13,7 @@ app.get('/api/users', async (req, res) => {
     pool.query('SELECT * FROM users',
         (error, results) => {
             if (error)
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             else
                 res.json(results.rows)
         });
@@ -23,7 +23,7 @@ app.get('/api/recipes', async (req, res) => {
     pool.query('SELECT * FROM recipes',
         (error, results) => {
             if (error)
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             else
                 res.json(results.rows)
         });
@@ -57,7 +57,7 @@ app.post('/api/users', jsonParser, async (req, res) => {
     pool.query(sql, [name, email, password],
         (error, results) => {
             if (error)
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             else
                 res.status(201).json({ message: 'User created successfully' });
         });
@@ -76,7 +76,7 @@ app.post('/api/recipes', jsonParser, async (req, res) => {
     pool.query(sql, [title, description, instructions, cook_time, servings, author_id],
         (error, results) => {
             if (error)
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             else
                 res.status(201).json({ message: 'Recipe created successfully' });
         }
@@ -97,12 +97,40 @@ app.get('/api/ingredients/:recipe_id', jsonParser, async (req, res) => {
         [recipe_id],
         (error, results) => {
             if (error)
-                res.status(501).json(error);
+                res.status(501).json(error.message);
             else
                 res.json(results.rows)
         }
     )
 });
+
+app.post('/api/update-recipe/:recipe_id', jsonParser, async (req, res) => {
+    const recipe_id = req.params.recipe_id;
+
+    const title = req.body.title;
+    const description = req.body.description;
+    const instructions = req.body.instructions;
+    const cook_time = req.body.cook_time;
+    const servings = req.body.servings;
+    const author_id = req.body.author_id;
+
+    pool.query(`
+        UPDATE RECIPES SET
+        title = $1,
+        description = $2,
+        instructions = $3,
+        cook_time = $4,
+        servings = $5,
+        author_id = $6
+        WHERE recipe_id = $7`,
+        [title, description, instructions, cook_time, servings, author_id, recipe_id],
+        (error, result) => {
+            if (error)
+                res.status(500).json(error.message)
+            else
+                res.status(201).json(result)
+        })
+})
 
 app.listen(3000, () => {
     console.log('Server started on port 3000');
