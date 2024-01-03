@@ -1,13 +1,14 @@
 const express = require('express');
 const pg = require('pg');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 const app = express();
 
 const connectionString = `postgres://postgres:password@localhost:5432`;
 const pool = new pg.Pool({ connectionString });
-
+app.use(cors())
 
 app.get('/api/users',
     async (req, res) => {
@@ -36,16 +37,15 @@ app.post('/api/login', jsonParser,
         const email = req.body.email;
         const password = req.body.password;
 
-
         pool.query('SELECT PASSWORD FROM USERS WHERE EMAIL = $1', [email],
             async (error, results) => {
                 let match = await bcrypt.compare(password, results.rows[0].password)
                 if (error)
-                    res.status(500).json(error.message)
+                    res.status(200).json(error.message)
                 if (match)
-                    res.status(201).json({ message: 'Authenticated!' });
+                    res.status(200).json({ message: 'Authenticated!' });
                 else
-                    res.status(401).json({ message: 'Please try again!' });
+                    res.status(200).json({ message: 'Please try again!' });
             });
     });
 

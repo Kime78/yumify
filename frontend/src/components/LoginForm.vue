@@ -1,26 +1,35 @@
 <template>
   <div class="login-container">
     <h1>Login</h1>
-    <form ref="loginForm">
+    <form @submit.prevent="handleSubmit" ref="loginForm">
       <label for="email">Email:</label>
-      <input id="email" type="email" v-model="userCredentials.email" required>
-      <p v-if="!isValidEmail">Please enter a valid email address.</p>
+      <input id="email" type="email" v-model="userCredentials.email" required />
 
       <label for="password">Password:</label>
-      <input id="password" type="password" v-model="userCredentials.password" required>
-      <p v-if="!isValidPassword">Please enter a valid password.</p>
+      <input
+        id="password"
+        type="password"
+        v-model="userCredentials.password"
+        required
+      />
 
-      <button @click="handleSubmit" ref="submitBtnRef" :disabled="!isValidPassword || !isValidEmail">Submit</button>
+      <button
+        type="submit"
+        ref="submitBtnRef"
+        :disabled="!isValidPassword || !isValidEmail"
+      >
+        Submit
+      </button>
     </form>
   </div>
 </template>
 
-<script>
-import { reactive, computed, ref } from 'vue';
+<script setup>
+import { reactive, computed, ref } from "vue";
 
 const userCredentials = reactive({
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 });
 
 const isValidEmail = computed(() => {
@@ -29,32 +38,27 @@ const isValidEmail = computed(() => {
 
 const isValidPassword = computed(() => {
   return userCredentials.password.trim().length > 0;
-})
+});
 
 const submitBtnRef = ref(null);
 
-const handleSubmit = () => {
-  console.log('Form submitted');
-
-  submitBtnRef.value.disabled = true;
-
-  setTimeout(() => {
-    submitBtnRef.value.disabled = false;
-    alert('Login successful!');
-  }, 2000);
-};
-
-export default {
-  name: 'LoginForm',
-  setup() {
-    return {
-      userCredentials,
-      isValidEmail,
-      isValidPassword,
-      submitBtnRef,
-      handleSubmit,
-    };
-  },
+const handleSubmit = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: userCredentials.email,
+        password: userCredentials.password,
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error sending fetch request:", error);
+  }
 };
 </script>
 
