@@ -41,11 +41,11 @@ app.post('/api/login', jsonParser,
             async (error, results) => {
                 let match = await bcrypt.compare(password, results.rows[0].password)
                 if (error)
-                    res.status(200).json(error.message)
+                    res.status(500).json(error.message)
                 if (match)
-                    res.status(200).json({ message: 'Authenticated!' });
+                    res.status(201).json({ message: 'Authenticated!' });
                 else
-                    res.status(200).json({ message: 'Please try again!' });
+                    res.status(401).json({ message: 'Please try again!' });
             });
     });
 

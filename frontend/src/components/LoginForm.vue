@@ -26,7 +26,8 @@
 
 <script setup>
 import { reactive, computed, ref } from "vue";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const userCredentials = reactive({
   email: "",
   password: "",
@@ -55,7 +56,12 @@ const handleSubmit = async () => {
       }),
     });
     const data = await res.json();
-    console.log(data);
+
+    if (data.message == "Authenticated!") {
+      router.push("/recipes");
+    } else {
+      console.error("Login failed:", data.message);
+    }
   } catch (error) {
     console.error("Error sending fetch request:", error);
   }
