@@ -18,8 +18,9 @@
         ref="submitBtnRef"
         :disabled="!isValidPassword || !isValidEmail"
       >
-        Submit
+        Login
       </button>
+      <RouterLink to="/register">Or create a new account here!</RouterLink>
     </form>
   </div>
 </template>
