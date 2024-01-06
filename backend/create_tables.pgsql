@@ -5,6 +5,18 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS user_details (
+  user_details_id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  address VARCHAR(255),
+  phone_number VARCHAR(255),
+  favorite_food VARCHAR(255),
+
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
+  CONSTRAINT phone_number_length CHECK (LENGTH(phone_number) = 10),
+  CONSTRAINT phone_number_prefix CHECK (phone_number LIKE '07%')
+);
+
 CREATE TABLE IF NOT EXISTS recipes (
   recipe_id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,

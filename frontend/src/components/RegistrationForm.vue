@@ -3,6 +3,17 @@
   <form @submit.prevent="handleRegister" ref="registerRef">
     <input placeholder="Name" type="text" v-model="userCredentials.name" />
     <input placeholder="Email" type="email" v-model="userCredentials.email" />
+    <input placeholder="Address*" type="text" v-model="userDetails.address" />
+    <input
+      placeholder="Phone Number*"
+      type="text"
+      v-model="userDetails.phoneNumber"
+    />
+    <input
+      placeholder="Favorite Food*"
+      type="text"
+      v-model="userDetails.favoriteFood"
+    />
     <input
       placeholder="Password"
       type="password"
@@ -40,6 +51,12 @@ const userCredentials = reactive({
   confirmedPassword: "",
 });
 
+const userDetails = reactive({
+  address: "",
+  phoneNumber: "",
+  favoriteFood: "",
+});
+
 const isValidName = computed(() => {
   return userCredentials.name.trim().length > 0;
 });
@@ -72,6 +89,22 @@ const handleRegister = async () => {
         email: userCredentials.email,
         name: userCredentials.name,
         password: userCredentials.password,
+      }),
+    });
+
+    const response = await fetch("http://localhost:3000/api/users");
+    const array = await response.json();
+    const user_id = array[array.length - 1].user_id;
+
+    await fetch("http://localhost:3000/api/add-user-details/" + user_id, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        address: userDetails.address,
+        phone_number: userDetails.phoneNumber,
+        favorite_food: userDetails.favoriteFood,
       }),
     });
     const data = await res.json();

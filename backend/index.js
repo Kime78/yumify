@@ -193,6 +193,28 @@ app.post("/api/delete-recipe/:recipe_id", jsonParser, async (req, res) => {
   );
 });
 
+app.post("/api/add-user-details/:user_id", jsonParser, async (req, res) => {
+  const user_id = req.params.user_id;
+
+  const address = req.body.address;
+  const phone_number = req.body.phone_number;
+  const favorite_food = req.body.favorite_food;
+
+  pool.query(
+    `
+    INSERT INTO user_details 
+    (user_id, address, phone_number, favorite_food) 
+    VALUES 
+    ($1, $2, $3, $4)`,
+
+    [user_id, address, phone_number, favorite_food],
+    (error, result) => {
+      if (error) res.status(500).json(error.message);
+      else res.status(201).json({ message: "Detailes added succesfully" });
+    }
+  );
+});
+
 app.listen(3000, () => {
   console.log("Server started on port 3000");
 });
