@@ -26,6 +26,18 @@
             {{ ingredient.unit }})
           </li>
         </ul>
+
+        <div class="recipe-actions">
+          <button v-if="recipe.author_id === loggedInID" class="delete-button">
+            Sterge
+          </button>
+
+          <button v-if="recipe.author_id === loggedInID" class="edit-button">
+            Edit
+          </button>
+
+          <button class="heart-button">Like</button>
+        </div>
       </div>
     </div>
   </div>
@@ -34,6 +46,7 @@
 <script setup>
 import { ref } from "vue";
 import { loggedInID } from "@/router";
+
 const recipes = ref([]);
 const loading = ref(true);
 
