@@ -1,6 +1,6 @@
 <template>
   <div class="recipes-container">
-    <p>Logged on user id {{ loggedInID }}</p>
+    <p @click="onDetailsBtn">Logged on user id {{ loggedInID }}</p>
     <button @click="onNewRecipeBtn">Post a new recipe</button>
     <h3>Recipes :D</h3>
 
@@ -99,6 +99,11 @@ async function onDeleteBtn(id) {
   });
   await fetchRecipes();
 }
+
+async function onDetailsBtn() {
+  router.push("/details");
+}
+
 async function onLikeBtn(id) {
   console.log(id);
 }

@@ -215,6 +215,19 @@ app.post("/api/add-user-details/:user_id", jsonParser, async (req, res) => {
   );
 });
 
+app.get("/api/get-user-details/:user_id", jsonParser, async (req, res) => {
+  const user_id = req.params.user_id;
+
+  pool.query(
+    "SELECT * FROM user_details WHERE user_id = $1",
+    [user_id],
+    (error, result) => {
+      if (error) res.status(500).json(error.message);
+      else res.status(201).json(result.rows);
+    }
+  );
+});
+
 app.listen(3000, () => {
   console.log("Server started on port 3000");
 });

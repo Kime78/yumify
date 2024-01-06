@@ -5,6 +5,7 @@ import LoginForm from "../components/LoginForm.vue";
 import RecipeViewer from "../components/RecipeViewer.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
 import NewRecipeForm from "../components/NewRecipeForm.vue";
+import UserDetailsViewer from "../components/UserDetailsViewer.vue";
 export var loggedInID = 0;
 
 export const setLoggedInID = (userId) => {
@@ -26,6 +27,7 @@ const routes = [
   { path: "/", component: LoginForm },
   { path: "/register", component: RegistrationForm },
   { path: "/new-recipe", component: NewRecipeForm },
+  { path: "/details", component: UserDetailsViewer },
 ];
 
 const router = createRouter({
