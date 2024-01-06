@@ -78,6 +78,22 @@ app.post("/api/users", jsonParser, async (req, res) => {
   });
 });
 
+app.post("/api/new-recipe-link", jsonParser, async (req, res) => {
+  const recipe_id = req.body.recipe_id;
+  const ingredient_id = req.body.ingredient_id;
+  const amount = req.body.amount;
+
+  await pool.query(
+    "INSERT INTO RECIPE_INGREDIENTS (recipe_id, ingredient_id, amount) VALUES ($1, $2, $3)",
+    [recipe_id, ingredient_id, amount],
+    (error, results) => {
+      if (error) res.status(500).json(error.message);
+      else
+        res.status(201).json({ message: "Recipe link created successfully" });
+    }
+  );
+});
+
 app.post("/api/recipes", jsonParser, async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;

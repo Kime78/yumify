@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { loggedInID } from "@/router";
+import router, { loggedInID } from "@/router";
 import { ref } from "vue";
 
 const newIngredientName = ref("");
@@ -51,6 +51,8 @@ const newRecipeName = ref("");
 const newRecipeDescription = ref("");
 const newRecipeInstructions = ref("");
 const newRecipeIngredients = ref([]);
+const newRecipeCookTime = ref(0);
+const newRecipeServings = ref(0);
 const allIngredients = ref([]);
 
 async function fetchIngredients() {
@@ -64,7 +66,7 @@ allIngredients.value = fetchIngredients();
 async function onAddIngredient() {
   // Add ingredient to the recipe
   // daca un igredient e deja folosesti pe ala daca nu creezi unul nou
-  const ingredients = await allIngredients.value;
+  let ingredients = await allIngredients.value;
   const name = newIngredientName.value;
   const amount = newIngredientAmount.value;
   const unit = newIngredientUnit.value;
@@ -72,8 +74,6 @@ async function onAddIngredient() {
   const test = ingredients.some((ingredient) => {
     return ingredient.name == newIngredientName.value;
   });
-
-  const id = ingredients.find((elem) => elem.name == name).ingredient_id;
 
   if (!test) {
     //add new ingredient to DB
@@ -88,6 +88,9 @@ async function onAddIngredient() {
       }),
     });
   }
+  allIngredients.value = fetchIngredients();
+  ingredients = await allIngredients.value;
+  const id = ingredients.find((elem) => elem.name == name).ingredient_id;
   const temp = newRecipeIngredients.value.slice();
   temp.push({
     name,
@@ -104,19 +107,42 @@ function onRemoveIngredient() {
 }
 
 async function onAddRecipe() {
-  const name = newRecipeName.value;
+  const title = newRecipeName.value;
   const description = newRecipeDescription.value;
   const instructions = newRecipeInstructions.value;
-  await fetch("http://localhost:3000/api/new-recipe", {
+  const servings = newRecipeServings.value;
+  const cookTime = newRecipeCookTime.value;
+  await fetch("http://localhost:3000/api/recipes", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
-      name: name,
+      title: title,
       description: description,
       instructions: instructions,
+      cook_time: cookTime,
+      servings: servings,
+      author_id: loggedInID,
     }),
   });
+  const response = await fetch("http://localhost:3000/api/recipes");
+  const array = await response.json();
+  const recipe_id = array[array.length - 1].recipe_id;
   for (const ingredient of newRecipeIngredients.value) {
-    console.log(ingredient.id);
+    await fetch("http://localhost:3000/api/new-recipe-link", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        recipe_id: recipe_id,
+        ingredient_id: ingredient.id,
+        amount: ingredient.amount,
+      }),
+    });
   }
+
+  router.push("/recipes");
 }
 </script>
