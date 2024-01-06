@@ -18,8 +18,7 @@ const routes = [
     beforeEnter: (to, _, next) => {
       if (loggedInID == 0)
         next({
-          path: "/login",
-          query: { redirect: to.fullPath },
+          path: "/",
         });
       else next();
     },
