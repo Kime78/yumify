@@ -29,15 +29,25 @@
         </ul>
 
         <div class="recipe-actions">
-          <button v-if="recipe.author_id === loggedInID" class="delete-button">
+          <button
+            @click="onDeleteBtn(recipe.recipe_id)"
+            v-if="recipe.author_id === loggedInID"
+            class="delete-button"
+          >
             Sterge
           </button>
 
-          <button v-if="recipe.author_id === loggedInID" class="edit-button">
+          <button
+            @click="onEditBtn(recipe.recipe_id)"
+            v-if="recipe.author_id === loggedInID"
+            class="edit-button"
+          >
             Edit
           </button>
 
-          <button class="heart-button">Like</button>
+          <button @click="onLikeBtn(recipe.recipe_id)" class="heart-button">
+            Like
+          </button>
         </div>
       </div>
     </div>
@@ -80,6 +90,20 @@ async function fetchIngredients(recipe_id) {
   );
   const ingredientsData = await response.json();
   return ingredientsData;
+}
+
+async function onDeleteBtn(id) {
+  console.log(id);
+  await fetch("http://localhost:3000/api/delete-recipe/" + id, {
+    method: "POST",
+  });
+  await fetchRecipes();
+}
+async function onLikeBtn(id) {
+  console.log(id);
+}
+async function onEditBtn(id) {
+  console.log(id);
 }
 
 fetchRecipes();

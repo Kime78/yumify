@@ -175,11 +175,16 @@ app.post("/api/update-recipe/:recipe_id", jsonParser, async (req, res) => {
 
 app.post("/api/delete-recipe/:recipe_id", jsonParser, async (req, res) => {
   const recipe_id = req.params.recipe_id;
-
   pool.query(
     `
-            DELETE FROM RECIPES
-            WHERE recipe_id = $1`,
+    DELETE FROM RECIPE_INGREDIENTS where RECIPE_ID = $1
+  `,
+    [recipe_id]
+  );
+  pool.query(
+    `
+      DELETE FROM RECIPES
+      WHERE recipe_id = $1; `,
     [recipe_id],
     (error, result) => {
       if (error) res.status(500).json(error.message);
