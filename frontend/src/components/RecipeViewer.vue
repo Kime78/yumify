@@ -1,5 +1,6 @@
 <template>
   <div class="recipes-container">
+    <p>Logged on user id {{ loggedInID }}</p>
     <h3>Recipes :D</h3>
 
     <div v-if="loading">
@@ -32,7 +33,7 @@
 
 <script setup>
 import { ref } from "vue";
-
+import { loggedInID } from "@/router";
 const recipes = ref([]);
 const loading = ref(true);
 

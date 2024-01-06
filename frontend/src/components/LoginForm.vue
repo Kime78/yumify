@@ -28,6 +28,7 @@
 <script setup>
 import { reactive, computed, ref } from "vue";
 import { useRouter } from "vue-router";
+import { setLoggedInID } from "@/router";
 const router = useRouter();
 const userCredentials = reactive({
   email: "",
@@ -59,6 +60,7 @@ const handleSubmit = async () => {
     const data = await res.json();
 
     if (data.message == "Authenticated!") {
+      setLoggedInID(data.user_id);
       router.push("/recipes");
     } else {
       console.error("Login failed:", data.message);
