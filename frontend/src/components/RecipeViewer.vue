@@ -1,6 +1,7 @@
 <template>
   <div class="recipes-container">
     <p>Logged on user id {{ loggedInID }}</p>
+    <button @click="onNewRecipeBtn">Post a new recipe</button>
     <h3>Recipes :D</h3>
 
     <div v-if="loading">
@@ -10,12 +11,12 @@
     <div v-else>
       <div class="recipe" v-for="recipe in recipes" :key="recipe.recipe_id">
         <h4>{{ recipe.title }}</h4>
-        <h5>Descriere:</h5>
+        <h5>DEscription:</h5>
         <p>{{ recipe.description }}</p>
-        <h5>Instructiuni:</h5>
+        <h5>instructions:</h5>
         <p>{{ recipe.instructions }}</p>
 
-        <h5>Ingrediente:</h5>
+        <h5>Ingredients:</h5>
 
         <ul>
           <li
@@ -45,7 +46,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { loggedInID } from "@/router";
+import router, { loggedInID } from "@/router";
 
 const recipes = ref([]);
 const loading = ref(true);
@@ -67,6 +68,10 @@ async function fetchRecipes() {
   } finally {
     loading.value = false;
   }
+}
+
+function onNewRecipeBtn() {
+  router.push("/new-recipe");
 }
 
 async function fetchIngredients(recipe_id) {

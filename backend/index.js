@@ -35,13 +35,32 @@ app.post("/api/login", jsonParser, async (req, res) => {
       let match = await bcrypt.compare(password, results.rows[0].password);
       if (error) res.status(500).json(error.message);
       if (match)
-        res
-          .status(201)
-          .json({
-            message: "Authenticated!",
-            user_id: results.rows[0].user_id,
-          });
+        res.status(201).json({
+          message: "Authenticated!",
+          user_id: results.rows[0].user_id,
+        });
       else res.status(401).json({ message: "Please try again!" });
+    }
+  );
+});
+
+app.get("/api/ingredients-list", jsonParser, async (req, res) => {
+  await pool.query("SELECT * FROM INGREDIENTS", (error, result) => {
+    if (error) res.status(500).json(error.message);
+    res.status(201).json(result.rows);
+  });
+});
+
+app.post("/api/new-ingredient", jsonParser, async (req, res) => {
+  const name = req.body.name;
+  const unit = req.body.unit;
+
+  pool.query(
+    "INSERT INTO ingredients (name, unit) VALUES ($1, $2)",
+    [name, unit],
+    (error, result) => {
+      if (error) res.status(500).json(error.message);
+      res.status(201).json({ message: "Ingredient created successfully" });
     }
   );
 });
@@ -88,7 +107,7 @@ app.get("/api/ingredients/:recipe_id", jsonParser, async (req, res) => {
 
   pool.query(
     `
-            SELECT DISTINCT I.NAME, RI.AMOUNT, RI.UNIT 
+            SELECT DISTINCT I.NAME, RI.AMOUNT, I.UNIT 
             FROM INGREDIENTS I 
             JOIN RECIPE_INGREDIENTS RI 
             ON I.INGREDIENT_ID = RI.INGREDIENT_ID

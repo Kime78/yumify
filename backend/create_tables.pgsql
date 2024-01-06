@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS recipes (
 
 CREATE TABLE IF NOT EXISTS ingredients (
   ingredient_id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL UNIQUE
+  name VARCHAR(255) NOT NULL UNIQUE,
+  unit VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
@@ -26,7 +27,6 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
   recipe_id INT NOT NULL,
   ingredient_id INT NOT NULL,
   amount FLOAT NOT NULL,
-  unit VARCHAR(255) NOT NULL,
   FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
   FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id)
 );

@@ -4,7 +4,7 @@ import { createWebHashHistory } from "vue-router";
 import LoginForm from "../components/LoginForm.vue";
 import RecipeViewer from "../components/RecipeViewer.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
-
+import NewRecipeForm from "../components/NewRecipeForm.vue";
 export var loggedInID = 0;
 
 export const setLoggedInID = (userId) => {
@@ -25,6 +25,7 @@ const routes = [
   },
   { path: "/", component: LoginForm },
   { path: "/register", component: RegistrationForm },
+  { path: "/new-recipe", component: NewRecipeForm },
 ];
 
 const router = createRouter({
