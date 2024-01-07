@@ -108,7 +108,7 @@ async function onLikeBtn(id) {
   console.log(id);
 }
 async function onEditBtn(id) {
-  console.log(id);
+  router.push("/edit-recipe/" + id);
 }
 
 fetchRecipes();

@@ -6,6 +6,8 @@ import RecipeViewer from "../components/RecipeViewer.vue";
 import RegistrationForm from "../components/RegistrationForm.vue";
 import NewRecipeForm from "../components/NewRecipeForm.vue";
 import UserDetailsViewer from "../components/UserDetailsViewer.vue";
+import EditRecipe from "../components/EditRecipe.vue";
+
 export var loggedInID = 0;
 
 export const setLoggedInID = (userId) => {
@@ -26,6 +28,7 @@ const routes = [
   },
   { path: "/", component: LoginForm },
   { path: "/register", component: RegistrationForm },
+  { path: "/edit-recipe/:id", component: EditRecipe },
   { path: "/new-recipe", component: NewRecipeForm },
   { path: "/details", component: UserDetailsViewer },
 ];

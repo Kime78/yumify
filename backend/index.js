@@ -145,27 +145,17 @@ app.post("/api/update-recipe/:recipe_id", jsonParser, async (req, res) => {
   const instructions = req.body.instructions;
   const cook_time = req.body.cook_time;
   const servings = req.body.servings;
-  const author_id = req.body.author_id;
 
   pool.query(
     `
-            UPDATE RECIPES SET
-            title = $1,
-            description = $2,
-            instructions = $3,
-            cook_time = $4,
-            servings = $5,
-            author_id = $6
-            WHERE recipe_id = $7`,
-    [
-      title,
-      description,
-      instructions,
-      cook_time,
-      servings,
-      author_id,
-      recipe_id,
-    ],
+      UPDATE RECIPES SET
+      title = $1,
+      description = $2,
+      instructions = $3,
+      cook_time = $4,
+      servings = $5
+      WHERE recipe_id = $6`,
+    [title, description, instructions, cook_time, servings, recipe_id],
     (error, result) => {
       if (error) res.status(500).json(error.message);
       else res.status(201).json(result);
