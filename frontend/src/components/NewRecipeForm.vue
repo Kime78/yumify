@@ -64,8 +64,6 @@ async function fetchIngredients() {
 allIngredients.value = fetchIngredients();
 
 async function onAddIngredient() {
-  // Add ingredient to the recipe
-  // daca un igredient e deja folosesti pe ala daca nu creezi unul nou
   let ingredients = await allIngredients.value;
   const name = newIngredientName.value;
   const amount = newIngredientAmount.value;

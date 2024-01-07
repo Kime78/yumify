@@ -1,19 +1,21 @@
 <template>
   <div class="recipes-container">
-    <p @click="onDetailsBtn">Logged on user id {{ loggedInID }}</p>
+    <p @click="onDetailsBtn">
+      Logged on user id {{ loggedInID }} click here for details!
+    </p>
     <button @click="onNewRecipeBtn">Post a new recipe</button>
-    <h3>Recipes :D</h3>
+    <h3>Recipes:</h3>
 
     <div v-if="loading">
-      <p>Se incarca smecheria...</p>
+      <p>Se incarca...</p>
     </div>
 
     <div v-else>
       <div class="recipe" v-for="recipe in recipes" :key="recipe.recipe_id">
         <h4>{{ recipe.title }}</h4>
-        <h5>DEscription:</h5>
+        <h5>Description:</h5>
         <p>{{ recipe.description }}</p>
-        <h5>instructions:</h5>
+        <h5>Instructions:</h5>
         <p>{{ recipe.instructions }}</p>
 
         <h5>Ingredients:</h5>
@@ -43,10 +45,6 @@
             class="edit-button"
           >
             Edit
-          </button>
-
-          <button @click="onLikeBtn(recipe.recipe_id)" class="heart-button">
-            Like
           </button>
         </div>
       </div>
@@ -104,9 +102,6 @@ async function onDetailsBtn() {
   router.push("/details");
 }
 
-async function onLikeBtn(id) {
-  console.log(id);
-}
 async function onEditBtn(id) {
   router.push("/edit-recipe/" + id);
 }
