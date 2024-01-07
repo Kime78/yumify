@@ -165,6 +165,7 @@ app.post("/api/update-recipe/:recipe_id", jsonParser, async (req, res) => {
 
 app.post("/api/delete-recipe/:recipe_id", jsonParser, async (req, res) => {
   const recipe_id = req.params.recipe_id;
+  pool.query("BEGIN;");
   pool.query(
     `
     DELETE FROM RECIPE_INGREDIENTS where RECIPE_ID = $1
@@ -181,6 +182,7 @@ app.post("/api/delete-recipe/:recipe_id", jsonParser, async (req, res) => {
       else res.status(201).json({ message: "Deleted successfully." });
     }
   );
+  pool.query("COMMIT;");
 });
 
 app.post("/api/add-user-details/:user_id", jsonParser, async (req, res) => {
